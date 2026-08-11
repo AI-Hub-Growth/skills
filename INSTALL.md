@@ -10,14 +10,13 @@
 
 丢了就去控制台重置（regenerate），旧的立即失效。
 
-## 2. 设环境变量
+## 2. 设 API Key
 
 ```bash
 export LINC_API_KEY="cak_..."
-export LINC_HOST="https://<你的灯虹域名>"
 ```
 
-本地运行 canvas 时设为 `http://127.0.0.1:8080`。5173 是 Vite 前端及浏览器入口；虽然会代理 `/api`，Skill 的 API 测试应直连 8080。
+默认请求 `https://aicanvas.qnlinking.com`，普通用户不用设置 Host。本地运行 canvas 时覆盖为 `export LINC_HOST="http://127.0.0.1:8080"`。5173 是 Vite 前端及浏览器入口；虽然会代理 `/api`，Skill 的 API 测试应直连 8080。
 
 写进 `~/.zshrc` / `~/.bashrc` 或用你惯用的密钥管理工具。**不要提交到 git。**
 
@@ -74,8 +73,8 @@ https://raw.githubusercontent.com/AI-Hub-Growth/skills/main/plugins/linc/skills/
 手动验：
 
 ```bash
-curl -s "$LINC_HOST/api/auth/me" -H "Authorization: Bearer $LINC_API_KEY"
-curl -s "$LINC_HOST/api/ai/model-list?model_type=video"
+curl -s "${LINC_HOST:-https://aicanvas.qnlinking.com}/api/auth/me" -H "Authorization: Bearer $LINC_API_KEY"
+curl -s "${LINC_HOST:-https://aicanvas.qnlinking.com}/api/ai/model-list?model_type=video"
 ```
 
 第一条返回 `Unauthorized` → 密钥无效、过期或已停用，去控制台重置。

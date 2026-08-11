@@ -23,7 +23,7 @@ description: |
 
 ## 开工检查（BLOCKING）
 
-`LINC_API_KEY` / `LINC_HOST` 有没有？跑 `GET /api/auth/me` 验，`Unauthorized` 就停。
+`LINC_HOST` 缺失就使用正式默认地址 `https://aicanvas.qnlinking.com`；本地/私有部署才覆盖。`LINC_API_KEY` 缺失就让用户在环境中配置，不要让他贴进对话。跑 `GET /api/auth/me` 验，`Unauthorized` 就停。
 
 ---
 

@@ -20,6 +20,7 @@ from typing import Any
 
 KEY_RE = re.compile(r"cak_[0-9a-fA-F]{48}")
 TERMINAL_STATUSES = {"completed", "failed", "succeeded", "approved"}
+DEFAULT_LINC_HOST = "https://aicanvas.qnlinking.com"
 
 
 class LincError(RuntimeError):
@@ -77,7 +78,7 @@ def request_json(
     anonymous: bool = False,
     timeout: float = 60,
 ) -> Any:
-    host = validate_host(os.environ.get("LINC_HOST", ""))
+    host = validate_host(os.environ.get("LINC_HOST") or DEFAULT_LINC_HOST)
     path = validate_api_path(path)
     headers = {"Accept": "application/json"}
     if not anonymous:
@@ -220,7 +221,7 @@ def command_state_init(args: argparse.Namespace) -> None:
     path = pathlib.Path(args.file)
     if path.exists() and not args.force:
         raise LincError(f"状态文件已存在：{path}；拒绝覆盖")
-    host = validate_host(os.environ.get("LINC_HOST", ""))
+    host = validate_host(os.environ.get("LINC_HOST") or DEFAULT_LINC_HOST)
     atomic_write(
         path,
         {

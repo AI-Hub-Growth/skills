@@ -27,7 +27,7 @@ JSON 请求与扣费提交使用 [`common/scripts/linc_api.py`](../../common/scr
 
 ## 开工检查（BLOCKING）
 
-1. **凭证** —— `LINC_API_KEY` / `LINC_HOST`。跑 `GET /api/auth/me` 验，`Unauthorized` 就停。
+1. **凭证** —— `LINC_HOST` 缺失就使用 `https://aicanvas.qnlinking.com`；本地/私有部署才覆盖。`LINC_API_KEY` 缺失就让用户在环境中配置，不要让他贴进对话。跑 `GET /api/auth/me` 验，`Unauthorized` 就停。
 2. **模型** —— `GET /api/ai/model-list?model_type=image` 或 `?model_type=video`。**禁止硬编码模型 ID / 分辨率 / 画幅 / 时长。** 该接口无需鉴权，可以最先调。
 
 ## 三件必须让用户知道的事

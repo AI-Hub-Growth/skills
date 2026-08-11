@@ -17,6 +17,7 @@ SPEC.loader.exec_module(linc_api)
 
 class LincApiTests(unittest.TestCase):
     def test_host_requires_clean_https_origin(self):
+        self.assertEqual(linc_api.DEFAULT_LINC_HOST, "https://aicanvas.qnlinking.com")
         self.assertEqual(linc_api.validate_host("https://linc.example"), "https://linc.example")
         self.assertEqual(linc_api.validate_host("http://127.0.0.1:8080"), "http://127.0.0.1:8080")
         self.assertEqual(linc_api.validate_host("http://localhost:8080"), "http://localhost:8080")
@@ -108,6 +109,14 @@ class LincApiTests(unittest.TestCase):
         request = opener.open.call_args.args[0]
         self.assertEqual(request.full_url, "https://linc.example/api/ai/image/task")
         self.assertIn("Bearer cak_", request.headers["Authorization"])
+
+        default_env = {"LINC_API_KEY": "cak_" + "a" * 48}
+        with mock.patch.dict(os.environ, default_env, clear=True), mock.patch.object(
+            linc_api.urllib.request, "build_opener", return_value=opener
+        ):
+            linc_api.request_json("GET", "/api/auth/me")
+        default_request = opener.open.call_args.args[0]
+        self.assertEqual(default_request.full_url, "https://aicanvas.qnlinking.com/api/auth/me")
 
         opener.open.return_value = Response({"code": 40001, "message": "InvalidParameter"})
         with mock.patch.dict(os.environ, env, clear=True), mock.patch.object(

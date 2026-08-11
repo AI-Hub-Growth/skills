@@ -18,12 +18,13 @@
 
 见 [INSTALL.md](INSTALL.md)。给 agent 自己装的版本见 [INSTALL_FOR_AGENTS.md](INSTALL_FOR_AGENTS.md)。
 
-需要两个环境变量：
+普通用户只需要 API Key：
 
 ```bash
 export LINC_API_KEY="cak_..."     # 控制台「个人中心 → API Keys」创建
-export LINC_HOST="https://<你的灯虹域名>"
 ```
+
+默认 API 地址是 `https://aicanvas.qnlinking.com`。只有本地开发或私有部署才设置 `LINC_HOST` 覆盖，例如 `http://127.0.0.1:8080`。
 
 ## 三件必须知道的事
 
