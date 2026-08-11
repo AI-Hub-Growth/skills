@@ -8,11 +8,11 @@ import sys
 import urllib.parse
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-PLUGIN_ROOT = os.path.join(ROOT, "plugins", "linc")
+PLUGIN_ROOT = os.path.join(ROOT, "plugins", "aicanvas")
 SKILLS = [
-    "plugins/linc/skills/linc-drama",
-    "plugins/linc/skills/linc-media",
-    "plugins/linc/skills/linc-assets",
+    "plugins/aicanvas/skills/aicanvas-drama",
+    "plugins/aicanvas/skills/aicanvas-media",
+    "plugins/aicanvas/skills/aicanvas-assets",
 ]
 REQUIRED_FIELDS = ["name", "description"]
 
@@ -133,14 +133,15 @@ def check_versions():
         return
     with open(version_file, encoding="utf-8") as f:
         version = f.read().strip()
-    if not re.match(r"^\d+\.\d+\.\d+$", version):
+    semver = r"\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?(?:\+[0-9A-Za-z.-]+)?"
+    if not re.fullmatch(semver, version):
         fail(f"VERSION 内容 `{version}` 不是语义化版本号")
         return
 
     for manifest in [
-        "plugins/linc/.claude-plugin/plugin.json",
+        "plugins/aicanvas/.claude-plugin/plugin.json",
         ".claude-plugin/marketplace.json",
-        "plugins/linc/.codex-plugin/plugin.json",
+        "plugins/aicanvas/.codex-plugin/plugin.json",
     ]:
         path = os.path.join(ROOT, manifest)
         if not os.path.isfile(path):
@@ -163,7 +164,7 @@ def check_versions():
         fail("缺少 CHANGELOG.md")
         return
     with open(changelog, encoding="utf-8") as f:
-        heads = re.findall(r"^## \[(\d+\.\d+\.\d+)\]", f.read(), re.M)
+        heads = re.findall(rf"^## \[({semver})\]", f.read(), re.M)
     if not heads:
         fail("CHANGELOG.md: 找不到 `## [x.y.z]` 版本条目")
     elif heads[0] != version:
@@ -187,10 +188,10 @@ def check_no_secrets():
 
 def check_manifests():
     for manifest in [
-        "plugins/linc/.claude-plugin/plugin.json",
+        "plugins/aicanvas/.claude-plugin/plugin.json",
         ".claude-plugin/marketplace.json",
         ".agents/plugins/marketplace.json",
-        "plugins/linc/.codex-plugin/plugin.json",
+        "plugins/aicanvas/.codex-plugin/plugin.json",
     ]:
         path = os.path.join(ROOT, manifest)
         if not os.path.isfile(path):
@@ -212,36 +213,36 @@ def check_manifests():
         with open(codex, encoding="utf-8") as f:
             data = json.load(f)
         if data.get("skills") != "./skills/":
-            fail("plugins/linc/.codex-plugin/plugin.json: skills 必须指向 `./skills/`")
+            fail("plugins/aicanvas/.codex-plugin/plugin.json: skills 必须指向 `./skills/`")
         allowed = {
             "name", "version", "description", "author", "homepage", "repository",
             "license", "keywords", "skills", "interface", "apps", "mcpServers",
         }
         extra = sorted(set(data) - allowed)
         if extra:
-            fail(f"plugins/linc/.codex-plugin/plugin.json: Codex 不支持字段 {extra}")
+            fail(f"plugins/aicanvas/.codex-plugin/plugin.json: Codex 不支持字段 {extra}")
 
     marketplace = os.path.join(ROOT, ".agents/plugins/marketplace.json")
     if os.path.isfile(marketplace):
         with open(marketplace, encoding="utf-8") as f:
             data = json.load(f)
-        entries = [item for item in data.get("plugins", []) if item.get("name") == "linc"]
+        entries = [item for item in data.get("plugins", []) if item.get("name") == "aicanvas"]
         if len(entries) != 1:
-            fail(".agents/plugins/marketplace.json: 必须有且仅有一个 linc 条目")
+            fail(".agents/plugins/marketplace.json: 必须有且仅有一个 aicanvas 条目")
         else:
             entry = entries[0]
-            if entry.get("source") != {"source": "local", "path": "./plugins/linc"}:
-                fail(".agents/plugins/marketplace.json: linc source 必须指向 ./plugins/linc")
+            if entry.get("source") != {"source": "local", "path": "./plugins/aicanvas"}:
+                fail(".agents/plugins/marketplace.json: aicanvas source 必须指向 ./plugins/aicanvas")
             policy = entry.get("policy", {})
             if policy.get("installation") != "AVAILABLE" or policy.get("authentication") != "ON_INSTALL":
-                fail(".agents/plugins/marketplace.json: linc policy 不完整")
+                fail(".agents/plugins/marketplace.json: aicanvas policy 不完整")
 
     skills_dir = os.path.join(PLUGIN_ROOT, "skills")
     if os.path.isdir(skills_dir):
         for name in os.listdir(skills_dir):
             path = os.path.join(skills_dir, name)
             if os.path.isdir(path) and not os.path.isfile(os.path.join(path, "SKILL.md")):
-                fail(f"plugins/linc/skills/{name}: skills 一级目录必须包含 SKILL.md")
+                fail(f"plugins/aicanvas/skills/{name}: skills 一级目录必须包含 SKILL.md")
 
 
 def check_no_generated_files():

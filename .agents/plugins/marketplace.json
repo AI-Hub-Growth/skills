@@ -1,14 +1,14 @@
 {
-  "name": "linc",
+  "name": "aicanvas",
   "interface": {
-    "displayName": "灯虹 LinC"
+    "displayName": "AICanvas（灯虹）"
   },
   "plugins": [
     {
-      "name": "linc",
+      "name": "aicanvas",
       "source": {
         "source": "local",
-        "path": "./plugins/linc"
+        "path": "./plugins/aicanvas"
       },
       "policy": {
         "installation": "AVAILABLE",

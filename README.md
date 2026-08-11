@@ -1,4 +1,4 @@
-# 灯虹 LinC Agent Skills
+# AICanvas（灯虹） Agent Skills
 
 在 codex / Claude Code 里用对话完成短剧制作，不用打开灯虹网页。
 
@@ -8,11 +8,11 @@
 
 | 技能 | 产物 | 什么时候用 |
 |---|---|---|
-| **linc-drama** | 一部短剧（多集、成片） | "把这个剧本拍出来"、"做一部 5 集的"、"我的分镜表导进去出片" |
-| **linc-media** | 单张图 / 单条视频 | "画一张…"、"生成一段 5 秒的海浪"、"首尾帧做个转场" |
-| **linc-assets** | 素材库与合规预审核（不生成） | "把素材整理到文件夹"、"这几张图能过审吗" |
+| **aicanvas-drama** | 一部短剧（多集、成片） | "把这个剧本拍出来"、"做一部 5 集的"、"我的分镜表导进去出片" |
+| **aicanvas-media** | 单张图 / 单条视频 | "画一张…"、"生成一段 5 秒的海浪"、"首尾帧做个转场" |
+| **aicanvas-assets** | 素材库与合规预审核（不生成） | "把素材整理到文件夹"、"这几张图能过审吗" |
 
-共享规则（鉴权、模型选型、计费、异步任务、错误处置、上传、接口索引）在 [`plugins/linc/common/`](plugins/linc/common/)，三个技能都指过去。
+共享规则（鉴权、模型选型、计费、异步任务、错误处置、上传、接口索引）在 [`plugins/aicanvas/common/`](plugins/aicanvas/common/)，三个技能都指过去。
 
 ## 安装
 
@@ -21,10 +21,10 @@
 普通用户只需要 API Key：
 
 ```bash
-export LINC_API_KEY="cak_..."     # 控制台「个人中心 → API Keys」创建
+export AICANVAS_API_KEY="cak_..."     # 控制台「个人中心 → API Keys」创建
 ```
 
-默认 API 地址是 `https://aicanvas.qnlinking.com`。只有本地开发或私有部署才设置 `LINC_HOST` 覆盖，例如 `http://127.0.0.1:8080`。
+默认 API 地址是 `https://aicanvas.qnlinking.com`。只有本地开发或私有部署才设置 `AICANVAS_HOST` 覆盖，例如 `http://127.0.0.1:8080`。
 
 ## 三件必须知道的事
 

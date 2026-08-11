@@ -13,14 +13,16 @@
 ## 2. 设 API Key
 
 ```bash
-export LINC_API_KEY="cak_..."
+export AICANVAS_API_KEY="cak_..."
 ```
 
-默认请求 `https://aicanvas.qnlinking.com`，普通用户不用设置 Host。本地运行 canvas 时覆盖为 `export LINC_HOST="http://127.0.0.1:8080"`。5173 是 Vite 前端及浏览器入口；虽然会代理 `/api`，Skill 的 API 测试应直连 8080。
+默认请求 `https://aicanvas.qnlinking.com`，普通用户不用设置 Host。本地运行 canvas 时覆盖为 `export AICANVAS_HOST="http://127.0.0.1:8080"`。5173 是 Vite 前端及浏览器入口；虽然会代理 `/api`，Skill 的 API 测试应直连 8080。
 
 写进 `~/.zshrc` / `~/.bashrc` 或用你惯用的密钥管理工具。**不要提交到 git。**
 
 ## 3. 装技能包
+
+如果之前测试过旧名称，先卸载 `linc@linc`、移除旧 marketplace，再重新添加仓库；本候选版不保留旧名称兼容入口。新插件标识是 `aicanvas@aicanvas`。
 
 ### Claude Code
 
@@ -28,20 +30,20 @@ export LINC_API_KEY="cak_..."
 
 ```
 /plugin marketplace add AI-Hub-Growth/skills
-/plugin install linc@linc
+/plugin install aicanvas@aicanvas
 ```
 
 ### Codex
 
 ```text
 codex plugin marketplace add AI-Hub-Growth/skills
-codex plugin add linc@linc
+codex plugin add aicanvas@aicanvas
 ```
 
 ### Cursor
 
 ```bash
-git clone --depth 1 https://github.com/AI-Hub-Growth/skills.git ~/.cursor/skills/linc
+git clone --depth 1 https://github.com/AI-Hub-Growth/skills.git ~/.cursor/skills/aicanvas
 ```
 
 Cursor 的递归 skill 发现尚未纳入本版实装验证；正式支持范围目前是 Claude Code 和 Codex。
@@ -51,7 +53,7 @@ Cursor 的递归 skill 发现尚未纳入本版实装验证；正式支持范围
 把某个 SKILL.md 的 raw 链接直接丢给 agent 让它读：
 
 ```
-https://raw.githubusercontent.com/AI-Hub-Growth/skills/main/plugins/linc/skills/linc-drama/SKILL.md
+https://raw.githubusercontent.com/AI-Hub-Growth/skills/main/plugins/aicanvas/skills/aicanvas-drama/SKILL.md
 ```
 
 它会顺着相对链接找到 `common/` 和 `references/`。适合临时试用。
@@ -73,8 +75,8 @@ https://raw.githubusercontent.com/AI-Hub-Growth/skills/main/plugins/linc/skills/
 手动验：
 
 ```bash
-curl -s "${LINC_HOST:-https://aicanvas.qnlinking.com}/api/auth/me" -H "Authorization: Bearer $LINC_API_KEY"
-curl -s "${LINC_HOST:-https://aicanvas.qnlinking.com}/api/ai/model-list?model_type=video"
+curl -s "${AICANVAS_HOST:-https://aicanvas.qnlinking.com}/api/auth/me" -H "Authorization: Bearer $AICANVAS_API_KEY"
+curl -s "${AICANVAS_HOST:-https://aicanvas.qnlinking.com}/api/ai/model-list?model_type=video"
 ```
 
 第一条返回 `Unauthorized` → 密钥无效、过期或已停用，去控制台重置。
@@ -85,9 +87,9 @@ curl -s "${LINC_HOST:-https://aicanvas.qnlinking.com}/api/ai/model-list?model_ty
 
 | 你说 | 应该选中 |
 |---|---|
-| "生成一段 5 秒的海浪视频" | `linc-media` |
-| "把这个剧本做成 3 集短剧" | `linc-drama` |
-| "把这些素材整理进一个文件夹" | `linc-assets` |
+| "生成一段 5 秒的海浪视频" | `aicanvas-media` |
+| "把这个剧本做成 3 集短剧" | `aicanvas-drama` |
+| "把这些素材整理进一个文件夹" | `aicanvas-assets` |
 
 ## 权限说明
 
