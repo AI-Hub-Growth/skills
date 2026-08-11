@@ -18,6 +18,8 @@ SPEC.loader.exec_module(linc_api)
 class LincApiTests(unittest.TestCase):
     def test_host_requires_clean_https_origin(self):
         self.assertEqual(linc_api.validate_host("https://linc.example"), "https://linc.example")
+        self.assertEqual(linc_api.validate_host("http://127.0.0.1:8080"), "http://127.0.0.1:8080")
+        self.assertEqual(linc_api.validate_host("http://localhost:8080"), "http://localhost:8080")
         for bad in (
             "http://linc.example",
             "https://user@linc.example",

@@ -11,6 +11,8 @@ export LINC_API_KEY="cak_..."
 export LINC_HOST="https://<灯虹域名>"
 ```
 
+本地 canvas 开发环境例外使用 `http://127.0.0.1:8080`。公网地址必须是 HTTPS；只有 `localhost`、`127.0.0.1`、`::1` 允许 HTTP。5173 是前端开发服务器，虽然会代理 `/api`，Skill 的裸 API 调用优先直连 8080。
+
 `LINC_API_KEY` 缺失时**停下来向用户要**，不要猜、不要找别的凭证、不要继续发请求。
 
 ## 凭证格式

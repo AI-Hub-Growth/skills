@@ -41,10 +41,11 @@ def redact(value: str) -> str:
 
 def validate_host(raw: str) -> str:
     parsed = urllib.parse.urlsplit(raw)
-    if parsed.scheme != "https":
-        raise LincError("LINC_HOST 必须使用 https")
     if not parsed.hostname or parsed.username or parsed.password:
         raise LincError("LINC_HOST 必须是无用户名/密码的绝对主机地址")
+    loopback = parsed.hostname in {"localhost", "127.0.0.1", "::1"}
+    if parsed.scheme != "https" and not (parsed.scheme == "http" and loopback):
+        raise LincError("LINC_HOST 公网地址必须使用 https；仅 localhost/127.0.0.1/::1 可使用 http")
     if parsed.query or parsed.fragment or parsed.path not in ("", "/"):
         raise LincError("LINC_HOST 不能包含路径、查询参数或 fragment")
     return raw.rstrip("/")
@@ -89,7 +90,11 @@ def request_json(
         data = json.dumps(body, ensure_ascii=False).encode("utf-8")
         headers["Content-Type"] = "application/json"
     req = urllib.request.Request(host + path, data=data, headers=headers, method=method)
-    opener = urllib.request.build_opener(NoRedirect)
+    hostname = urllib.parse.urlsplit(host).hostname
+    handlers = [NoRedirect]
+    if hostname in {"localhost", "127.0.0.1", "::1"}:
+        handlers.append(urllib.request.ProxyHandler({}))
+    opener = urllib.request.build_opener(*handlers)
     try:
         with opener.open(req, timeout=timeout) as response:
             raw = response.read().decode("utf-8")

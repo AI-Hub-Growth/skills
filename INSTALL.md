@@ -17,6 +17,8 @@ export LINC_API_KEY="cak_..."
 export LINC_HOST="https://<你的灯虹域名>"
 ```
 
+本地运行 canvas 时设为 `http://127.0.0.1:8080`。5173 是 Vite 前端及浏览器入口；虽然会代理 `/api`，Skill 的 API 测试应直连 8080。
+
 写进 `~/.zshrc` / `~/.bashrc` 或用你惯用的密钥管理工具。**不要提交到 git。**
 
 ## 3. 装技能包
