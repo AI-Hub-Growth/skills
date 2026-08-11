@@ -1,0 +1,19 @@
+{
+  "name": "linc",
+  "owner": {
+    "name": "AI-Hub-Growth",
+    "url": "https://github.com/AI-Hub-Growth"
+  },
+  "description": "灯虹（LinC）对话式短剧制作、图片视频生成与素材管理技能包。",
+  "plugins": [
+    {
+      "name": "linc",
+      "source": "./plugins/linc",
+      "description": "灯虹（LinC）短剧制作技能包：linc-drama 做整部短剧，linc-media 生成单张图/单条视频，linc-assets 管理素材库与合规预审核。",
+      "version": "0.1.0",
+      "license": "MIT",
+      "homepage": "https://github.com/AI-Hub-Growth/skills",
+      "keywords": ["linc", "短剧", "video-generation", "storyboard"]
+    }
+  ]
+}

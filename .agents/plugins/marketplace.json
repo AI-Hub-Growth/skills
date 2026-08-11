@@ -1,0 +1,20 @@
+{
+  "name": "linc",
+  "interface": {
+    "displayName": "灯虹 LinC"
+  },
+  "plugins": [
+    {
+      "name": "linc",
+      "source": {
+        "source": "local",
+        "path": "./plugins/linc"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Creativity"
+    }
+  ]
+}
