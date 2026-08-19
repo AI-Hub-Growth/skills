@@ -4,6 +4,12 @@
 
 格式参照 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)，版本号遵循 [语义化版本](https://semver.org/lang/zh-CN/)。
 
+## [Unreleased]
+
+### Fixed
+
+- 修正参考素材流程：生成只消费 URL，`POST /api/media` 是可选的素材管理步骤；平台上传 URL 使用 `source=uploaded`，外部 URL 仅在用户明确要求入库时使用 `source=imported`，并作为可能变化或失效的外链引用管理。
+
 ## [0.1.0-rc.1] - 2026-08-11
 
 首个版本。
@@ -29,3 +35,4 @@
 - Cursor 安装尚未实装验证；首版正式支持 Claude Code 与 Codex。
 
 [0.1.0-rc.1]: https://github.com/AI-Hub-Growth/skills/releases/tag/v0.1.0-rc.1
+[Unreleased]: https://github.com/AI-Hub-Growth/skills/compare/v0.1.0-rc.1...HEAD

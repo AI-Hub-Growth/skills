@@ -15,6 +15,49 @@ curl -s -X POST "$AICANVAS_HOST/api/upload" \
 
 没有预签名直传，只有这一条服务端转存。不扣费。
 
+### 上传后登记到素材库
+
+`POST /api/upload` **只上传文件，不创建素材库记录**。图片和视频生成只消费参考 URL，不查询对应的 media_asset；拿到 `data.url` 后已经可以生成。
+
+`POST /api/media` 是**可选的管理步骤**。仅在用户明确要求把文件放进素材库、后续要按素材管理，或短剧 `referenceAssetIdList` 需要 media_asset ID 时调用：
+
+```bash
+curl -s -X POST "$AICANVAS_HOST/api/media" \
+  -H "Authorization: Bearer $AICANVAS_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "type":"image",
+    "name":"角色参考图.png",
+    "source":"uploaded",
+    "url":"<POST /api/upload 返回的 data.url>",
+    "group_id":"root"
+  }'
+```
+
+`type` ∈ `image` / `video` / `audio` / `text` / `file`；只有登记 `POST /api/upload` 刚返回的 URL 时才用 `source=uploaded`。`group_id` 可省略，省略时进入根目录。返回的 `data.id` 是 media_asset ID。
+
+两条路径不要混在一起：
+
+```text
+仅生成：POST /api/upload 取得 data.url → 图片/视频生成使用 data.url
+
+需要入库或 ID：POST /api/upload 取得 data.url
+  → POST /api/media 创建素材记录，取得 data.id
+  → 短剧 referenceAssetIdList 使用 data.id
+```
+
+生成接口的 `group_id` 只控制**生成结果**的保存位置，不会把输入参考素材登记到素材库。要把参考素材放进指定目录，在 `POST /api/media` 中传对应的 `group_id`。
+
+### 外部 URL 入库
+
+`POST /api/media` 不要求 URL 来自平台对象存储，也接受公网 HTTP(S) URL。平台会对外部 URL 做限量内容探测和素材类型校验，并拒绝用户凭证、私网、回环、链路本地地址和不安全重定向；但**不会证明外部文件的所有权，也不会把它复制到平台存储**。外部内容可能变化、失效或被撤回。
+
+因此：
+
+- 不要为了生成而自动登记外部参考 URL；生成接口直接使用 URL 即可。
+- 只有用户明确要把外部文件作为素材管理时才登记，使用 `source=imported`，并说明这是外链引用。
+- `source=uploaded` 只用于本次 `POST /api/upload` 返回的 URL，不要把任意外部 URL 伪装成上传素材。
+
 ### 支持的类型
 
 - 图片 PNG / JPEG / WebP
@@ -54,7 +97,7 @@ curl -s -X POST "$AICANVAS_HOST/api/upload/process-video" \
 划重点：
 
 - **`group_id` 不是参考素材。** 它只决定产物归档位置，传不传都不影响生成内容。不传或传 `root` = 素材库根目录。传了不存在的文件夹 → `ResourceNotFound`。
-- **`referenceAssetIdList` 要 ID，不要 URL。** ID 从素材库接口拿（见 [aicanvas-assets](../skills/aicanvas-assets/SKILL.md)）。把 `POST /api/upload` 返回的 URL 塞进去必然失败。
+- **`referenceAssetIdList` 要 ID，不要 URL。** 这是少数必须登记素材的路径：上传本地文件后调用 `POST /api/media`，使用返回的 `data.id`（见 [aicanvas-assets](../skills/aicanvas-assets/SKILL.md)）。把 `POST /api/upload` 返回的 URL 塞进去必然失败。
 - **`image_list[].url` 要 URL，不要 ID。** 反过来同理。
 
 单条视频生成的 `image_list[]` 还有个 `role` 字段：`first_frame` / `end_frame` / `reference_image`。选哪个要和模型的 `gen_modes` 对上——`start_end_to_video` 才认首尾帧。见 [models.md](./models.md#gen_modes)。
