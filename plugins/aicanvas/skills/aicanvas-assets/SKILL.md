@@ -29,7 +29,22 @@ description: |
 
 ## 上传
 
-见 [upload.md](../../common/upload.md)。要点：`POST /api/upload`（multipart），返回 `data.url`；**按实际内容校验，改扩展名没用**；HTML/SVG/JS/SWF 一律拒。
+见 [upload.md](../../common/upload.md)。要点：`POST /api/upload`（multipart）只把文件传到存储并返回 `data.url`，**不会创建素材记录**；按实际内容校验，改扩展名没用；HTML/SVG/JS/SWF 一律拒。
+
+生成接口只需要 URL。用户只是要拿本地文件生成时，上传后直接使用 `data.url`，不要多建素材记录。
+
+用户明确说“上传到素材库”“作为素材管理”，或下游需要 media_asset ID 时，上传成功后再登记：
+
+```bash
+curl -s -X POST "$AICANVAS_HOST/api/media" \
+  -H "Authorization: Bearer $AICANVAS_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"type":"image","name":"角色参考图.png","source":"uploaded","url":"<data.url>","group_id":"root"}'
+```
+
+`type` 按实际素材传 `image` / `video` / `audio` / `text` / `file`；登记本次上传返回的 URL 时，`source` 固定为 `uploaded`。返回的 `data.id` 是短剧 `referenceAssetIdList` 使用的 media_asset ID。生成接口仍引用上传返回的 URL。
+
+外部公网 URL 也能登记，但平台只保存引用，不复制文件、不证明所有权。只有用户明确要求管理该外链时才用 `source=imported` 登记，并提醒外部内容可能变化或失效。不要把任意外部 URL 标成 `uploaded`。平台会在登记前做 SSRF 安全的限量内容探测和实际类型校验。
 
 远程视频要裁一段：`POST /api/upload/process-video`。
 

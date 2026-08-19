@@ -49,6 +49,7 @@
 | POST | `/api/folders/move` | 移动 |
 | PUT | `/api/folders` | 重命名/改属性 |
 | DELETE | `/api/folders` | 删除（级联子树，不可撤销） |
+| POST | `/api/media` | 可选：把已有 URL 登记为素材；平台上传用 `source=uploaded`，外部 URL 用 `source=imported` |
 | GET | `/api/media/{id}` | 素材详情 |
 
 全部不扣费。

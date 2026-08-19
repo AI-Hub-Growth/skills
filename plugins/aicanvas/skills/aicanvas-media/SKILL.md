@@ -39,6 +39,14 @@ JSON 请求与扣费提交使用 [`common/scripts/aicanvas_api.py`](../../common
 
 实时模型列表请求失败时，只做只读重试和网络/DNS/Host 诊断。仍不可用就停止选型并报告具体错误；**不得要求用户手填模型 ID，不得用缓存或记忆值绕过。**
 
+## 本地参考素材
+
+用户提供本地图片、视频或音频时，提交生成前先调用 `POST /api/upload` 取得 `data.url`。生成请求的 `image_list` / `video_list` / `audio_list` 直接使用这个 URL，不需要先创建素材记录。
+
+`POST /api/media` 是可选的管理步骤：只有用户明确要求把参考文件放进素材库，或后续流程需要 media_asset ID 时，才按 [upload.md](../../common/upload.md#上传后登记到素材库) 以 `source=uploaded` 登记。生成接口本身不会补建素材记录，生成请求中的 `group_id` 也只控制生成结果归档。
+
+用户直接提供公网 HTTP(S) URL 时，生成接口可直接引用，不要自动调用 `/api/media`。用户明确要求把外链加入素材库时才以 `source=imported` 登记，并说明平台保存的是外链引用，不是托管副本。
+
 ## 三件必须让用户知道的事
 
 第一次提交前一次性说清：花的是**团队账户**的积分；**没有中止接口，提交了就停不下来也退不回来**；这次大概花多少。
@@ -150,6 +158,7 @@ curl -s -X POST "$AICANVAS_HOST/api/ai/video/task" \
 - [ ] 图片的 `aspect_ratio` / 视频的 `aspect` 取值合法（空数组则已省略）
 - [ ] 视频 `duration` 在模型 `{min,max}` 内
 - [ ] 参考素材数量 ≤ `max_reference_images` / `max_reference_videos` / `max_reference_audios`
+- [ ] 本地参考素材已通过 `POST /api/upload` 取得 URL；仅在用户要求入库或需要 media_asset ID 时才以 `source=uploaded` 登记
 - [ ] 目标模式在该模型 `gen_modes` 里
 - [ ] 该模型 `review_asset_enabled=true` 时，参考素材已走审核素材库（→ [aicanvas-assets](../aicanvas-assets/SKILL.md)）
 - [ ] 已把预估消耗念给用户，用户确认了

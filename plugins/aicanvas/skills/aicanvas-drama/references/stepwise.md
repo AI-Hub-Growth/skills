@@ -100,7 +100,7 @@ curl -s -X POST "$AICANVAS_HOST/api/storyboards/$SB_ID/assets" \
 
 改已有资产用 `POST /api/storyboards/$SB_ID/assets/{asset_id}`（也是 POST）。
 
-`referenceAssetIdList` 要的是 media_asset **ID**，不是 URL。见 [upload.md](../../../common/upload.md#三个容易混的字段)。
+`referenceAssetIdList` 要的是 media_asset **ID**，不是 URL。本地参考图先调用 `POST /api/upload` 取得 URL，再以 `source=uploaded` 调用 `POST /api/media`，把返回的 `data.id` 填进列表。只上传文件不会创建可引用的素材记录。见 [upload.md](../../../common/upload.md#上传后登记到素材库)。
 
 ### 3c. 生成参考图 💰
 

@@ -269,6 +269,23 @@ def check_recovery_contract():
             fail(f"common/async-tasks.md: 恢复契约缺少 {operation_type} → {endpoint}")
 
 
+def check_uploaded_asset_contract():
+    required = {
+        "plugins/aicanvas/common/upload.md": ["可选的管理步骤", "source=uploaded", "source=imported", "不查询对应的 media_asset"],
+        "plugins/aicanvas/common/api-index.md": ["/api/media", "source=uploaded", "source=imported"],
+        "plugins/aicanvas/skills/aicanvas-assets/SKILL.md": ["/api/media", 'source":"uploaded', "source=imported", "只保存引用"],
+        "plugins/aicanvas/skills/aicanvas-media/SKILL.md": ["不需要先创建素材记录", "可选的管理步骤", "source=imported"],
+        "plugins/aicanvas/skills/aicanvas-drama/references/stepwise.md": ["POST /api/media", "data.id", "referenceAssetIdList"],
+    }
+    for relative_path, markers in required.items():
+        path = os.path.join(ROOT, relative_path)
+        with open(path, encoding="utf-8") as f:
+            text = f.read()
+        missing = [marker for marker in markers if marker not in text]
+        if missing:
+            fail(f"{relative_path}: 上传素材登记契约缺少 {missing}")
+
+
 def main():
     check_frontmatter()
     check_links()
@@ -276,6 +293,7 @@ def main():
     check_no_secrets()
     check_manifests()
     check_recovery_contract()
+    check_uploaded_asset_contract()
     check_no_generated_files()
 
     if errors:
