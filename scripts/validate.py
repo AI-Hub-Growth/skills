@@ -286,6 +286,25 @@ def check_uploaded_asset_contract():
             fail(f"{relative_path}: 上传素材登记契约缺少 {missing}")
 
 
+def check_update_contract():
+    checker = os.path.join(PLUGIN_ROOT, "common", "scripts", "check_version.py")
+    guide = os.path.join(PLUGIN_ROOT, "common", "version-check.md")
+    if not os.path.isfile(checker):
+        fail("缺少 common/scripts/check_version.py")
+    if not os.path.isfile(guide):
+        fail("缺少 common/version-check.md")
+
+    link = "[使用前版本检查](../../common/version-check.md)"
+    for skill in SKILLS:
+        path = os.path.join(ROOT, skill, "SKILL.md")
+        if not os.path.isfile(path):
+            continue
+        with open(path, encoding="utf-8") as f:
+            text = f.read()
+        if link not in text:
+            fail(f"{skill}/SKILL.md: 缺少共享使用前版本检查")
+
+
 def main():
     check_frontmatter()
     check_links()
@@ -294,6 +313,7 @@ def main():
     check_manifests()
     check_recovery_contract()
     check_uploaded_asset_contract()
+    check_update_contract()
     check_no_generated_files()
 
     if errors:

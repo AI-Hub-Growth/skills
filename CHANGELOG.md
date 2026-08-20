@@ -6,6 +6,13 @@
 
 ## [Unreleased]
 
+## [0.1.0-rc.2] - 2026-08-20
+
+### Added
+
+- 新增与 Canvas 单场景分镜编辑器一致的分镜 DSL 说明：镜头标记、九个固定字段、多行转义、中文候选值、`@` 素材引用、时长格式和默认导入示例。
+- 三个 skill 每次运行前共同检查仓库 `main` 版本；无法确认版本时停止，发现不一致时通过 Codex / Claude Code 插件管理器更新。
+
 ### Fixed
 
 - 修正参考素材流程：生成只消费 URL，`POST /api/media` 是可选的素材管理步骤；平台上传 URL 使用 `source=uploaded`，外部 URL 仅在用户明确要求入库时使用 `source=imported`，并作为可能变化或失效的外链引用管理。
@@ -35,4 +42,5 @@
 - Cursor 安装尚未实装验证；首版正式支持 Claude Code 与 Codex。
 
 [0.1.0-rc.1]: https://github.com/AI-Hub-Growth/skills/releases/tag/v0.1.0-rc.1
-[Unreleased]: https://github.com/AI-Hub-Growth/skills/compare/v0.1.0-rc.1...HEAD
+[0.1.0-rc.2]: https://github.com/AI-Hub-Growth/skills/releases/tag/v0.1.0-rc.2
+[Unreleased]: https://github.com/AI-Hub-Growth/skills/compare/v0.1.0-rc.2...HEAD

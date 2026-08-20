@@ -18,7 +18,7 @@ POST .../imports/apply         原子覆盖
 
 ## 1. 先导出拿格式
 
-**导入文档的 markdown 格式没有独立文档，唯一可靠的做法是先导出一份当模板。**
+镜头块的字段与语法见 [分镜脚本 DSL](storyboard-dsl.md)。项目级文件还需要精确的分集/场景标题来匹配目标场景，因此**仍要先导出一份当外壳模板**，不要凭空编场景标题。
 
 ```bash
 curl -s "$AICANVAS_HOST/api/shots/storyboards/$SB_ID/projects/$SP_ID/export?format=md" \
@@ -34,12 +34,14 @@ curl -s "$AICANVAS_HOST/api/shots/storyboards/$SB_ID/projects/$SP_ID/export?form
 
 ## 2. 编辑
 
-在导出的 `.md` 上改。要点：
+先读 [分镜脚本 DSL](storyboard-dsl.md)，再在导出的 `.md` 上改。要点：
 
 - **UTF-8**，扩展名 `.md` / `.markdown` / `.txt`，**≤ 2 MiB**
 - **不要改场景标题行**——匹配靠它。改了就匹配不上，那一场会被跳过
 - 空场景 = 清空该场现有镜头（是"清空"不是"忽略"）
 - 想只改一场，就只留那一场；其他场不在文档里就不动它们
+- 默认使用编辑器的中文字段值，不把 `full_shot`、`slow_push_in` 等存储层枚举写进分镜文本
+- 会影响构图、动作、镜头、灯光、环境或声音的内容放进 `画面描述` / `视频内容`，不要放在 `备注`
 
 ## 3. Preview（BLOCKING）
 

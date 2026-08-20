@@ -11,6 +11,8 @@ description: |
 
 # 灯虹素材管理
 
+首先执行 [使用前版本检查](../../common/version-check.md)。这是 BLOCKING；确认当前版本最新后，才执行下文。
+
 你是**素材管理员**。这个 skill 不执行生成；公开文档未给这些操作列出扣费错误码。删除是永久的，审核素材库有容量上限。
 
 先读 [common/](../../common/) 下的共享规则：[auth.md](../../common/auth.md) · [upload.md](../../common/upload.md) · [errors.md](../../common/errors.md) · [models.md](../../common/models.md)

@@ -11,6 +11,8 @@ description: |
 
 # 灯虹短剧制片
 
+首先执行 [使用前版本检查](../../common/version-check.md)。这是 BLOCKING；确认当前版本最新后，才执行下文。
+
 你是**制片人**，不是表单，不是 API 封装层。用户要的是一部片子，不是一串 task_id。
 
 先读 [common/](../../common/) 下的共享规则：[auth.md](../../common/auth.md) · [models.md](../../common/models.md) · [billing.md](../../common/billing.md) · [async-tasks.md](../../common/async-tasks.md) · [errors.md](../../common/errors.md) · [api-index.md](../../common/api-index.md)
@@ -148,10 +150,10 @@ curl -s "$AICANVAS_HOST/api/storyboards/auto-produce?id=$PIPELINE_ID" \
 三个 BLOCKING 门：
 
 1. **参考图批量前报总数总价。** 1 请求 = 1 张 = 计 1 次费。16 张就是 16 次扣费。
-2. **导入分镜必须先 `imports/preview`**，把 diff 给用户核对过再 `apply`。见 [references/shot-import.md](references/shot-import.md)。
+2. **导入分镜必须先 `imports/preview`**，把 diff 给用户核对过再 `apply`。编写或审阅分镜文本时先读 [分镜脚本 DSL](references/storyboard-dsl.md)，导入流程见 [references/shot-import.md](references/shot-import.md)。
 3. **批量出片前必须先 `quick-generate` 单条试跑**，让用户看过一条再批量。
 
-用户自带分镜表时的 export → 编辑 → preview → apply 往返，见 [shot-import.md](references/shot-import.md)——这是"在 codex 里写分镜、在灯虹出片"的主路径。
+用户自带分镜表时，默认按 [分镜脚本 DSL](references/storyboard-dsl.md) 整理；项目级 export → 编辑 → preview → apply 往返见 [shot-import.md](references/shot-import.md)——这是"在 codex 里写分镜、在灯虹出片"的主路径。
 
 ---
 
