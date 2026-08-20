@@ -10,7 +10,7 @@
       "name": "aicanvas",
       "source": "./plugins/aicanvas",
       "description": "AICanvas（灯虹）短剧制作技能包：aicanvas-drama 做整部短剧，aicanvas-media 生成单张图/单条视频，aicanvas-assets 管理素材库与合规预审核。",
-      "version": "0.1.0-rc.1",
+      "version": "0.1.0-rc.2",
       "license": "MIT",
       "homepage": "https://github.com/AI-Hub-Growth/skills",
       "keywords": ["aicanvas", "短剧", "video-generation", "storyboard"]

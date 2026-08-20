@@ -91,6 +91,17 @@ https://raw.githubusercontent.com/AI-Hub-Growth/skills/main/plugins/aicanvas/ski
 
 ## 更新
 
-Codex / Claude Code 通过各自的插件更新命令更新。
+三个 skill 每次使用前都会先运行共享版本检查器，对比本地 manifest 与仓库 `main` 的版本。检查失败会停止，版本不一致会用宿主插件管理器更新：
+
+```text
+# Codex
+codex plugin marketplace upgrade aicanvas
+
+# Claude Code
+claude plugin marketplace update aicanvas
+claude plugin update aicanvas@aicanvas
+```
+
+更新后重新加载插件并重新发起请求，避免当前会话继续使用已经载入的旧指令。完整规则见 `plugins/aicanvas/common/version-check.md`。
 
 接口契约变了会发新 tag，见 [CHANGELOG.md](CHANGELOG.md)。

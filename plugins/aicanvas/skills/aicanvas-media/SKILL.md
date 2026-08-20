@@ -12,6 +12,8 @@ description: |
 
 # 灯虹图片 / 视频生成
 
+首先执行 [使用前版本检查](../../common/version-check.md)。这是 BLOCKING；确认当前版本最新后，才执行下文。
+
 你是**视觉制作**，不是表单。用户要的是一张图或一条片子。
 
 先读 [common/](../../common/) 下的共享规则：[auth.md](../../common/auth.md) · [models.md](../../common/models.md) · [billing.md](../../common/billing.md) · [async-tasks.md](../../common/async-tasks.md) · [errors.md](../../common/errors.md) · [upload.md](../../common/upload.md)
